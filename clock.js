@@ -10,6 +10,31 @@ function formatTime(date) {
   return `${hours}:${minutes}:${seconds}`;
 }
 
+function renderClock(clockElement) {
+  clockElement.textContent = formatTime(new Date());
+}
+
+function startClock() {
+  const clockElement = document.getElementById("clock");
+
+  if (!clockElement) {
+    throw new Error("Missing #clock element.");
+  }
+
+  renderClock(clockElement);
+
+  const delayToNextSecond = 1000 - new Date().getMilliseconds();
+
+  window.setTimeout(() => {
+    renderClock(clockElement);
+    window.setInterval(() => renderClock(clockElement), 1000);
+  }, delayToNextSecond);
+}
+
+if (typeof document !== "undefined") {
+  document.addEventListener("DOMContentLoaded", startClock);
+}
+
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { formatTime };
+  module.exports = { formatTime, renderClock, startClock };
 }
