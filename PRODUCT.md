@@ -2,41 +2,44 @@
 
 ## What It Is
 
-`alex-1883-test-32` is a small static browser clock with an SVG analog face. It
-can be opened directly from disk or served by any simple static HTTP server.
+`alex-1883-test-32` is a small static browser clock with a responsive SVG
+analog face. It can be opened directly from disk or served by any simple static
+HTTP server.
 
 ## What It Does
 
-- Shows the user's current local time on an analog SVG clock face.
-- Renders a circular face, 12 tick marks, and hour, minute, and second hands.
-- Rotates the hands to the current local time and updates once per second.
-- Aligns the first scheduled update to the next wall-clock second.
-- Centers the clock in a full-viewport neutral layout.
-- Keeps the clock responsive so it remains within desktop and mobile viewports.
+- Shows the user's current local time on an analog clock face.
+- Renders a circular face, 12 tick marks, and distinct hour, minute, and second
+  hands.
+- Computes hand angles from the current `Date`, with smooth hour/minute motion
+  and a discrete ticking second hand.
+- Updates immediately on page load, then aligns the recurring tick loop to the
+  next wall-clock second.
+- Stays centered in a neutral full-viewport layout and remains within desktop,
+  mobile, and wide browser viewports.
 
 ## Current Architecture
 
-- `index.html` is the page shell and contains the inline SVG clock markup.
-- The SVG clock uses `id="clock"` with `viewBox="-50 -50 100 100"`, one face
-  circle, 12 inline tick lines, and hand lines with `id="hand-hour"`,
-  `id="hand-minute"`, and `id="hand-second"` anchored at the SVG origin.
-- `styles.css` owns the viewport reset, centering, neutral background, SVG size,
-  and clock stroke styling.
-- `clock.js` owns `formatTime(date)`, `getClockAngles(date)`, DOM rendering, and
-  the tick loop.
-- `README.md` includes the current description, local run commands, test
-  commands, and a screenshot at `docs/screenshot.png`.
-- Tests use Node's built-in test runner for time formatting and Playwright for
-  SVG/browser coverage across Chromium, Firefox, WebKit, and a mobile Chromium
-  viewport.
-- There is no app build step, backend, database, or framework.
+- `index.html` contains the page shell and inline SVG clock markup.
+- `styles.css` owns the page reset, centering, responsive SVG sizing, and analog
+  face/hand styling.
+- `clock.js` owns `computeAngles(date)`, hand rendering, DOM startup, and tick
+  scheduling.
+- `README.md` documents local usage, test commands, and includes the current
+  screenshot at `docs/screenshot.png`.
+- Unit tests use Node's built-in test runner for angle computation, hand
+  rendering, and tick timing.
+- Playwright covers Chromium, Firefox, WebKit, and mobile Chromium, checking
+  rendering, ticking, viewport fit, and absence of browser console/page errors.
+- There is no build step, backend, database, or framework.
 
 ## Conventions
 
 - Keep the app plain HTML, CSS, and JavaScript unless a future requirement
   clearly justifies more tooling.
-- Keep `formatTime(date)` pure and independently testable.
-- Keep the SVG clock structure stable for the runtime hand-rotation selectors.
+- Keep `computeAngles(date)` pure and independently testable.
+- Preserve the SVG hand selectors: `#hand-hour`, `#hand-minute`, and
+  `#hand-second`.
 - Preserve direct `index.html` usage and static-server usage.
 - Do not commit local secrets, dependency folders, Playwright output, or
   agent/runtime metadata.
