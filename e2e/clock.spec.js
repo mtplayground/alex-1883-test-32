@@ -19,9 +19,13 @@ test("clock renders and ticks", async ({ page }) => {
   await expect(clock.locator(".clock-tick")).toHaveCount(12);
   await expect(clock.locator("#hand-hour")).toHaveCount(1);
   await expect(clock.locator("#hand-minute")).toHaveCount(1);
-  await expect(clock.locator("#hand-second")).toHaveCount(1);
 
-  const initialSecondTransform = await clock.locator("#hand-second").getAttribute("transform");
+  const secondHand = clock.locator("#hand-second");
+  const rotateTransform = /^rotate\(\d+(?:\.\d+)?\)$/;
+  await expect(secondHand).toHaveCount(1);
+  await expect(secondHand).toHaveAttribute("transform", rotateTransform);
+
+  const initialSecondTransform = await secondHand.getAttribute("transform");
   const viewport = page.viewportSize();
   const clockBox = await clock.boundingBox();
 
@@ -36,7 +40,8 @@ test("clock renders and ticks", async ({ page }) => {
 
   await page.waitForTimeout(1200);
 
-  const nextSecondTransform = await clock.locator("#hand-second").getAttribute("transform");
+  await expect(secondHand).toHaveAttribute("transform", rotateTransform);
+  const nextSecondTransform = await secondHand.getAttribute("transform");
   expect(nextSecondTransform).not.toBe(initialSecondTransform);
   expect(consoleErrors).toEqual([]);
   expect(pageErrors).toEqual([]);
