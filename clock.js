@@ -14,7 +14,15 @@ function computeAngles(date) {
   };
 }
 
-function renderClock(clockElement) {
+function millisecondsUntilNextSecond(date = new Date()) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+    throw new TypeError("millisecondsUntilNextSecond expects a valid Date.");
+  }
+
+  return 1000 - date.getMilliseconds();
+}
+
+function renderClock(clockElement, date = new Date()) {
   const hourHand = clockElement.querySelector("#hand-hour");
   const minuteHand = clockElement.querySelector("#hand-minute");
   const secondHand = clockElement.querySelector("#hand-second");
@@ -23,8 +31,7 @@ function renderClock(clockElement) {
     throw new Error("Missing clock hand element.");
   }
 
-  const now = new Date();
-  const { hour, minute, second } = computeAngles(now);
+  const { hour, minute, second } = computeAngles(date);
 
   hourHand.setAttribute("transform", `rotate(${hour})`);
   minuteHand.setAttribute("transform", `rotate(${minute})`);
@@ -41,11 +48,12 @@ function startClock() {
 
   renderClock(clockElement);
 
-  const delayToNextSecond = 1000 - new Date().getMilliseconds();
+  const tick = () => renderClock(clockElement);
+  const delayToNextSecond = millisecondsUntilNextSecond();
 
   window.setTimeout(() => {
-    renderClock(clockElement);
-    window.setInterval(() => renderClock(clockElement), 1000);
+    tick();
+    window.setInterval(tick, 1000);
   }, delayToNextSecond);
 }
 
@@ -54,5 +62,10 @@ if (typeof document !== "undefined") {
 }
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { computeAngles, renderClock, startClock };
+  module.exports = {
+    computeAngles,
+    millisecondsUntilNextSecond,
+    renderClock,
+    startClock,
+  };
 }
