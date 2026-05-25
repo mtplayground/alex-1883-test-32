@@ -7,12 +7,17 @@ body {
 
 body {
   background: #f5f5f3;
+  color: #1f2933;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 main {
   min-height: 100%;
   display: grid;
   place-items: center;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 #clock {
@@ -25,4 +30,7 @@ main {
   font-feature-settings: "tnum";
   line-height: 1;
   letter-spacing: 0;
+  text-align: center;
+  white-space: nowrap;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
 }
