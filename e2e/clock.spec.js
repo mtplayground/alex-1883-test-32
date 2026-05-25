@@ -14,9 +14,14 @@ test("clock renders and ticks", async ({ page }) => {
   await page.goto("/index.html");
 
   const clock = page.locator("#clock");
-  await expect(clock).toHaveText(/^\d{2}:\d{2}:\d{2}$/);
+  await expect(clock).toHaveAttribute("viewBox", "-50 -50 100 100");
+  await expect(clock.locator(".clock-face")).toHaveCount(1);
+  await expect(clock.locator(".clock-tick")).toHaveCount(12);
+  await expect(clock.locator("#hand-hour")).toHaveCount(1);
+  await expect(clock.locator("#hand-minute")).toHaveCount(1);
+  await expect(clock.locator("#hand-second")).toHaveCount(1);
 
-  const initialTime = await clock.textContent();
+  const initialSecondTransform = await clock.locator("#hand-second").getAttribute("transform");
   const viewport = page.viewportSize();
   const clockBox = await clock.boundingBox();
 
@@ -30,10 +35,9 @@ test("clock renders and ticks", async ({ page }) => {
   }
 
   await page.waitForTimeout(1200);
-  await expect(clock).toHaveText(/^\d{2}:\d{2}:\d{2}$/);
 
-  const nextTime = await clock.textContent();
-  expect(nextTime).not.toBe(initialTime);
+  const nextSecondTransform = await clock.locator("#hand-second").getAttribute("transform");
+  expect(nextSecondTransform).not.toBe(initialSecondTransform);
   expect(consoleErrors).toEqual([]);
   expect(pageErrors).toEqual([]);
 });
