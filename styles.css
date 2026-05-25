@@ -14,3 +14,15 @@ main {
   display: grid;
   place-items: center;
 }
+
+#clock {
+  color: #1f2933;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-size: clamp(3rem, 14vw, 8rem);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  line-height: 1;
+  letter-spacing: 0;
+}
