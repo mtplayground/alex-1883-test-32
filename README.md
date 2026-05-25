@@ -1,7 +1,7 @@
 # alex-1883-test-32
 
-A small static browser clock that shows the current local time as `HH:MM:SS`.
-It uses plain HTML, CSS, and JavaScript with no build step.
+A small static browser clock that shows the current local time on a responsive
+SVG analog face. It uses plain HTML, CSS, and JavaScript with no build step.
 
 ![Local Clock screenshot](docs/screenshot.png)
 
@@ -28,7 +28,7 @@ npm install
 npx playwright install
 ```
 
-Run the formatter unit tests:
+Run the unit tests:
 
 ```bash
 npm test
@@ -47,7 +47,8 @@ and produces no browser console or page errors.
 ## Files
 
 - `index.html`: page shell for the clock.
-- `styles.css`: centered full-viewport layout and responsive clock typography.
-- `clock.js`: time formatting, rendering, and tick scheduling.
-- `test/format-time.test.js`: unit coverage for `formatTime`.
+- `styles.css`: centered full-viewport layout and responsive analog clock styling.
+- `clock.js`: hand angle computation, rendering, and tick scheduling.
+- `test/compute-angles.test.js`: unit coverage for `computeAngles`.
+- `test/render-clock.test.js`: unit coverage for hand rendering and tick timing.
 - `e2e/clock.spec.js`: Playwright browser coverage.
