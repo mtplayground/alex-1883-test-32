@@ -1,23 +1,65 @@
-Architecture plan
+Architecture plan for issues #3-#10
 
 Scope
-- Issue #1 initializes the repository documentation for a small static clock app.
-- The app should be openable directly via index.html and also work when served by a simple local static server.
+- Build a dependency-light static browser clock that renders local time as
+  HH:MM:SS, updates every wall-clock second, and can be opened directly or
+  served by a simple static server.
+- Keep the implementation intentionally small: plain HTML, CSS, and JavaScript
+  first; introduce test tooling only for the unit and browser tests.
 
 Module structure and file organization
-- README.md: project overview, clock description, direct-open instructions, and local server instructions.
-- index.html: self-contained browser entry point for the clock.
-- Optional future split, only if needed: styles.css for presentation and script.js for clock behavior. For the current small scope, a single index.html is likely sufficient.
-- .gitignore: excludes build artifacts, local secrets, and agent/runtime metadata.
+- index.html
+  - Browser entry point.
+  - Contains a single main landmark with an empty div#clock.
+  - Links to styles.css and clock.js.
+- styles.css
+  - Full-viewport document reset.
+  - Centered main/clock layout.
+  - Responsive monospace clock typography using clamp() and tabular digits.
+- clock.js
+  - Exports or exposes formatTime(date), a pure Date -> "HH:MM:SS" formatter.
+  - Owns DOM startup on DOMContentLoaded.
+  - Renders #clock immediately, then schedules the next tick aligned to the
+    next wall-clock second before continuing at 1000ms intervals.
+- tests/unit
+  - Unit coverage for formatTime: midnight, noon, and single-digit padding.
+  - Prefer node --test if clock.js is made importable without browser globals;
+    otherwise use a tiny test.html runner.
+- tests/e2e
+  - Playwright spec serving the static directory and validating that #clock
+    matches the HH:MM:SS pattern and changes after about 1.2 seconds.
+- README.md
+  - Final polish target for a short project description, run/test commands,
+    and screenshot or screenshot placeholder as required by issue #10.
 
-Shared types
-- No shared application types are needed. If JavaScript is added, keep state minimal: current time, display format, and timer handle.
+Shared types and contracts
+- The only shared contract is formatTime(date): string.
+- formatTime must be deterministic for a provided Date and must not read the
+  DOM, timers, or current time internally.
+- DOM code should treat #clock as required page structure and fail visibly in
+  tests if the element is missing.
 
-Issue dependencies
-- Issue #1 has no dependency on other issues.
-- Repository setup should precede implementation so local metadata and secrets stay out of git.
+Dependencies between issues
+- #3 scaffolds the HTML shell and establishes the public DOM target.
+- #4 depends on #3 because styles target the page shell and #clock element.
+- #5 depends on #4 because typography builds on the centered layout.
+- #6 depends on #3 because clock.js is linked from the shell, but stays pure
+  enough for independent unit testing.
+- #7 depends on #6 and #3 because it combines formatTime with the DOM target
+  and timer behavior.
+- #8 depends on #6 because it validates the pure formatter contract.
+- #9 depends on #7 because the browser test needs the live render/tick loop.
+- #10 depends on #4, #5, #7, #8, and #9 because polish should verify layout,
+  responsiveness, browser behavior, console cleanliness, and documentation.
 
 Key design decisions
-- Prefer a dependency-free static implementation so index.html can be opened directly from disk.
-- Avoid build tooling unless later issues require a framework or bundling.
-- Keep documentation explicit about both direct file usage and `python -m http.server`.
+- Use plain static assets. No framework or bundler is needed for this app.
+- Keep clock.js testable by separating pure formatting from DOM/timer startup.
+- Prefer an ES module script if node --test is selected; otherwise keep a
+  browser-global function plus a test.html harness to preserve direct-open use.
+- Align the first delayed update to the next second boundary with
+  1000 - new Date().getMilliseconds(), then use setInterval(1000) after that.
+- Use system monospace fonts and font-variant-numeric: tabular-nums so the
+  displayed width remains stable as seconds change.
+- Keep CSS neutral and restrained: full-viewport centering, no decorative
+  dependencies, no layout shift from dynamic clock text.
