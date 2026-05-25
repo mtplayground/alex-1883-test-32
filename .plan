@@ -1,0 +1,23 @@
+Architecture plan
+
+Scope
+- Issue #1 initializes the repository documentation for a small static clock app.
+- The app should be openable directly via index.html and also work when served by a simple local static server.
+
+Module structure and file organization
+- README.md: project overview, clock description, direct-open instructions, and local server instructions.
+- index.html: self-contained browser entry point for the clock.
+- Optional future split, only if needed: styles.css for presentation and script.js for clock behavior. For the current small scope, a single index.html is likely sufficient.
+- .gitignore: excludes build artifacts, local secrets, and agent/runtime metadata.
+
+Shared types
+- No shared application types are needed. If JavaScript is added, keep state minimal: current time, display format, and timer handle.
+
+Issue dependencies
+- Issue #1 has no dependency on other issues.
+- Repository setup should precede implementation so local metadata and secrets stay out of git.
+
+Key design decisions
+- Prefer a dependency-free static implementation so index.html can be opened directly from disk.
+- Avoid build tooling unless later issues require a framework or bundling.
+- Keep documentation explicit about both direct file usage and `python -m http.server`.
