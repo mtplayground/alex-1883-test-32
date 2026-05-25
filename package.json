@@ -1,0 +1,7 @@
+{
+  "name": "alex-1883-test-32",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  }
+}
