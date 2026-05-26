@@ -17,6 +17,34 @@ test("clock renders and ticks", async ({ page }) => {
   await expect(clock).toHaveAttribute("viewBox", "-50 -50 100 100");
   await expect(clock.locator(".clock-face")).toHaveCount(1);
   await expect(clock.locator(".clock-tick")).toHaveCount(12);
+  await expect(clock.locator(".numeral.roman")).toHaveText([
+    "I",
+    "II",
+    "III",
+    "IV",
+    "V",
+    "VI",
+    "VII",
+    "VIII",
+    "IX",
+    "X",
+    "XI",
+    "XII",
+  ]);
+  await expect(clock.locator(".numeral.arabic")).toHaveText([
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+  ]);
   await expect(clock.locator("#hand-hour")).toHaveCount(1);
   await expect(clock.locator("#hand-minute")).toHaveCount(1);
 

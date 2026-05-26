@@ -36,6 +36,27 @@ main {
   stroke-width: 2;
 }
 
+.numeral {
+  dominant-baseline: central;
+  fill: #334155;
+  font-family: Georgia, "Times New Roman", serif;
+  pointer-events: none;
+  text-anchor: middle;
+  user-select: none;
+}
+
+.numeral.roman {
+  font-size: 5.8px;
+  font-weight: 700;
+}
+
+.numeral.arabic {
+  fill: #64748b;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 4.8px;
+  font-weight: 600;
+}
+
 .clock-hand {
   stroke: #1f2937;
   stroke-linecap: round;
