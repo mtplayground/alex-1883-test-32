@@ -39,21 +39,23 @@ main {
 .numeral {
   dominant-baseline: central;
   fill: #334155;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  paint-order: stroke fill;
   pointer-events: none;
+  stroke: #fbfaf8;
+  stroke-width: 0.35;
   text-anchor: middle;
   user-select: none;
 }
 
 .numeral.roman {
-  font-size: 5.8px;
+  font-size: 5.4px;
   font-weight: 700;
 }
 
 .numeral.arabic {
-  fill: #64748b;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 4.8px;
+  fill: #475569;
+  font-size: 4.2px;
   font-weight: 600;
 }
 
