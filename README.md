@@ -1,7 +1,8 @@
 # alex-1883-test-32
 
 A small static browser clock that shows the current local time on a responsive
-SVG analog face. It uses plain HTML, CSS, and JavaScript with no build step.
+SVG analog face with dual Roman and Arabic numeral rings. It uses plain HTML,
+CSS, and JavaScript with no build step.
 
 ![Local Clock screenshot](docs/screenshot.png)
 
@@ -41,8 +42,8 @@ npm run test:e2e
 ```
 
 The E2E suite verifies Chromium, Firefox, WebKit, and a mobile Chromium
-viewport. It checks that the clock renders, ticks, stays within the viewport,
-and produces no browser console or page errors.
+viewport. It checks that the clock renders with both numeral rings, ticks, stays
+within the viewport, and produces no browser console or page errors.
 
 ## Files
 
