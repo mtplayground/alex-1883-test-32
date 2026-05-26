@@ -1,50 +1,51 @@
-Architecture plan for issue #33
+Architecture plan for issues #35-#37
 
 Scope
-- Add two static numeral rings to the existing inline SVG analog clock face.
-- Keep the app plain HTML, CSS, and JavaScript with no build step, backend, or
-  database.
-- Preserve the current clock hand IDs and JavaScript rotation behavior.
+- Refine the visual treatment of the existing SVG numeral rings.
+- Strengthen browser coverage so the rendered Roman and Arabic numerals are
+  explicitly asserted.
+- Complete a polish pass across supported browsers, update the screenshot, and
+  document the dual numeral rings.
 
 Module structure and file organization
 - index.html
-  - Remains the page shell and owns the inline SVG clock structure.
-  - Add 24 static SVG text elements inside #clock: 12 Roman numerals on an
-    outer ring and 12 Arabic numerals on an inner ring.
-  - Place numerals with precomputed x/y values so rendering does not depend on
-    client-side geometry code.
+  - No structural changes are expected unless polish reveals a small coordinate
+    adjustment is needed to prevent visual collision.
+  - Preserve the existing static SVG text elements and hand/tick elements.
 - styles.css
-  - Add shared .numeral styling plus targeted .roman and .arabic variations.
-  - Keep numeral text centered with SVG text-anchor and dominant-baseline.
-  - Choose modest font sizes and colors that keep the rings readable without
-    competing with ticks or hands.
-- clock.js
-  - No functional change expected.
-  - Existing runtime selectors for #hand-hour, #hand-minute, and #hand-second
-    must continue to work after the SVG markup changes.
-- tests
-  - Extend browser or DOM-oriented coverage to confirm both numeral rings are
-    present, count 12 labels each, and do not break hand rendering.
-  - Keep existing angle, render, and Playwright coverage intact.
+  - Issue #35 owns numeral presentation: shared .numeral styling, neutral fill,
+    centered SVG text, and distinct Roman/Arabic sizing.
+  - Keep styling scoped to the clock SVG classes; avoid layout or framework
+    changes.
+- e2e/clock.spec.js
+  - Issue #36 owns browser assertions for visible Roman and Arabic numeral text.
+  - Keep existing hand-rotation and viewport assertions intact.
+- docs/screenshot.png
+  - Issue #37 refreshes the screenshot after the visual polish is complete.
+- README.md
+  - Issue #37 updates the project description to mention the dual numeral rings.
 
 Shared types and contracts
-- There are no new shared types.
-- The stable DOM contract remains the SVG #clock element plus hand elements
-  #hand-hour, #hand-minute, and #hand-second.
-- New styling hooks are class="numeral roman" and class="numeral arabic".
+- There are no new shared data types.
+- The stable DOM contract remains #clock, .numeral.roman, .numeral.arabic, and
+  the hand selectors #hand-hour, #hand-minute, and #hand-second.
+- clock.js should remain unchanged unless a regression is found; numeral styling
+  and assertions should not alter time computation or ticking behavior.
 
 Dependencies between issues
-- Only issue #33 is in scope for this batch, so there are no cross-issue
-  dependencies.
-- Implementation depends on the existing SVG face and tests already present in
-  the repository.
+- #35 should land first because it defines the final visual styling for the
+  numeral rings.
+- #36 depends on the numeral elements and styling hooks being present; it should
+  assert visible Roman XII and Arabic 12 while preserving existing behavior
+  checks.
+- #37 depends on #35 and #36 so the screenshot and README describe the polished,
+  tested state.
 
 Key design decisions
-- Use static SVG text rather than JavaScript-generated numerals so the clock
-  works when opened directly from disk and remains inspectable.
-- Keep numeral coordinates precomputed in index.html to match the issue
-  request and avoid adding geometry helpers to clock.js.
-- Insert numeral elements before the hand elements so hands render above both
-  rings.
-- Avoid extra dependencies or layout abstractions; this is a narrow SVG markup
-  and CSS enhancement.
+- Keep the project plain static HTML, CSS, and JavaScript.
+- Prefer SVG/CSS properties for centering and legibility rather than JavaScript
+  layout work.
+- Use the existing Playwright setup for cross-browser validation and screenshot
+  refresh; do not add new test tooling.
+- Treat visual collision as a styling/coordinate polish concern, not a reason
+  to redesign the SVG clock.
