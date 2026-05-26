@@ -45,6 +45,8 @@ test("clock renders and ticks", async ({ page }) => {
     "11",
     "12",
   ]);
+  await expect(clock.locator("text.roman").filter({ hasText: /^XII$/ })).toBeVisible();
+  await expect(clock.locator("text.arabic").filter({ hasText: /^12$/ })).toBeVisible();
   await expect(clock.locator("#hand-hour")).toHaveCount(1);
   await expect(clock.locator("#hand-minute")).toHaveCount(1);
 
