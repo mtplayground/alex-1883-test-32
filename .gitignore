@@ -14,3 +14,7 @@ test-results/
 .gitkeep
 .progress
 .db_decision
+.deploy_url
+.env.production
+verify-screenshot.png
+verify-ui.js
