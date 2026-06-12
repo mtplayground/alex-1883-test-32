@@ -28,12 +28,15 @@ HTTP server.
   scheduling.
 - `README.md` documents local usage, test commands, and includes the current
   screenshot at `docs/screenshot.png`.
+- `serve.py` is a tiny deployment/static-server helper that serves the repo on
+  `0.0.0.0:$PORT` and returns 404 for unsupported mutation probes; it does not
+  add an application backend.
 - Unit tests use Node's built-in test runner for angle computation, hand
   rendering, and tick timing.
 - Playwright covers Chromium, Firefox, WebKit, and mobile Chromium, checking
   rendering, numeral rings, ticking, viewport fit, and absence of browser
   console/page errors.
-- There is no build step, backend, database, or framework.
+- There is no build step, application backend, database, or framework.
 
 ## Conventions
 
